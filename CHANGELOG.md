@@ -24,8 +24,47 @@ The binary embeds the git SHA at build time (`bootc-migrate --version`).
 
 ## [Unreleased]
 
-Nothing yet. Work lands here until a version bump in `Cargo.toml`
-merges to `main`, which is what cuts the release — see RELEASING.md.
+### Added
+
+- Cross-family migration on the composefs route (#256). `bootc-migrate`
+  and `bootc-rebase`'s `CoreMigration`/`ImageSwap` routes now read the
+  target's `os-release` and package manager and refuse a target whose
+  `ID`/`ID_LIKE` share nothing with the host's and whose package manager
+  differs (Fedora → openSUSE). Two images with the same package manager
+  are one family whatever their `ID_LIKE` says (Bluefin LTS is `centos`);
+  a pair with no evidence either way (Dakota ships no package manager)
+  warns and keeps the standard merge. `--accept-cross-base` (new
+  on `bootc-migrate` and in the TUI's options) proceeds with a
+  cross-family `/etc` policy in Phase 4: the target's defaults win,
+  source-vendor-only files are dropped, machine state and user-added paths
+  are carried, identity databases merge target-first with the source's
+  accounts appended, `/var` ownership is renumbered to the target's ids,
+  displaced edits are kept as `.rebase-old` sidecars, and a first-boot
+  unit relabels for SELinux (or defers the `/var` remap) when needed. A
+  JSON report is written beside the deployment. Non-gating E2E cell:
+  bluefin → `ghcr.io/bootcrew/opensuse-bootc`.
+
+### Changed
+
+- `mergetc` grew a merge policy (identity-DB precedence and per-path
+  states); the default behaviour is unchanged.
+
+### Fixed
+
+- `bootc-rebase` finalizes the deployment `bootc switch` staged before it
+  returns, instead of leaving it to shutdown (#262). On a `bootc install
+  to-disk` layout with no separate /boot partition, libostree's shutdown-time
+  finalization fails to remount /boot (ostreedev/ostree#3365). The next boot
+  then lands in the previous deployment, and the console does not say why.
+  The bootloader entries are now written at once, and a failure is an error
+  the user sees.
+
+- Phase 4's dangling-symlink prune resolved a relative target such as
+  `/etc/os-release -> ../usr/lib/os-release` against the staged
+  deployment directory, which holds `etc` alone, and removed the link.
+  It now resolves the path the link names on the booted system against
+  the target image. openSUSE lost `os-release`, `localtime` and `termcap`
+  that way.
 
 ---
 
