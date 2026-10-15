@@ -26,6 +26,11 @@ The binary embeds the git SHA at build time (`bootc-migrate --version`).
 
 ### Added
 
+- Cross-family E2E base-pair matrix (#261). Three more non-gating cells
+  exercise `E2E_CROSS_FAMILY=1` beyond Bluefin → openSUSE Tumbleweed:
+  Bluefin → Debian, Ubuntu and Arch Linux. The test harness adapts
+  base-image setup (SSH units, multi-distro root home locations, and
+  family-specific `/etc` configuration sidecars).
 - Package host readiness report (#372): `bootc-rebase --dry-run` on a
   package-managed system checks boot mode, root filesystem, LUKS and LVM,
   the btrfs subvolume layout, `/boot` and `/home`, free space against the
