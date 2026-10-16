@@ -47,6 +47,7 @@ pub mod migration;
 pub mod motd;
 pub mod ostree;
 pub mod ostree_install;
+pub mod ostree_install_commit;
 pub mod package_host;
 pub mod preflight;
 pub mod rebase_controller;

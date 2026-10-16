@@ -151,7 +151,7 @@ OstreeInstall details (#313):
   machine-id) do not depend on the backend. When the route copies `/var`,
   the home-ownership check is relevant. The probe writes to
   `/var/lib/bootc-migrate/`, in the carried `/var`.
-- The route has no commit step. The composefs entry stays as the rollback.
+- The composefs entry stays as the rollback until `bootc-rebase commit` removes it.
   Thus the prompt does not use `report.json` with `composefs=`. It shows
   when two conditions are true: the carried
   `/var/lib/bootc-rebase/ostree-install-report.json` exists, and the kernel

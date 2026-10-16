@@ -156,6 +156,10 @@ pub fn gather_from(p: &StatusPaths) -> StatusState {
         (Some(r), false, _) if r.contains("composefs via CoreMigration") => Commit::NotApplicable(
             "booted the OSTree side; reboot into the composefs entry to commit".to_string(),
         ),
+        (Some(r), _, _) if r == OSTREE_INSTALL_ROUTE => Commit::NotApplicable(
+            "this route commits with `bootc-rebase commit`, which removes the composefs side"
+                .to_string(),
+        ),
         (Some(r), _, _) => Commit::NotApplicable(format!("route {r} has no commit step")),
         (None, _, _) => Commit::NotApplicable("no migration has been staged here".to_string()),
     };

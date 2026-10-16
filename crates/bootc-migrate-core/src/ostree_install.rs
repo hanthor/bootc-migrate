@@ -40,7 +40,7 @@
 //! [`newest_deployment`]) are pure; the I/O lives in [`OstreeInstallConfig::run`].
 
 use anyhow::{Context, Result, anyhow, bail};
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::process::Command;
@@ -361,8 +361,9 @@ pub fn carry_over_kargs(cmdline: &str) -> Vec<String> {
 }
 
 /// What the run did, written as JSON under [`STATE_DIR`] so it survives the
-/// reboot.
-#[derive(Debug, Clone, Serialize)]
+/// reboot, and read back by the commit step
+/// ([`crate::ostree_install_commit`]).
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct OstreeInstallReport {
     pub target_image: String,
     pub deployment: String,
@@ -374,7 +375,9 @@ pub struct OstreeInstallReport {
     pub cross_family: bool,
     pub grub_boot_entry: Option<String>,
     /// `/boot` has no partition of its own and the root is encrypted, so
-    /// GRUB cannot read the new deployment's kernels (#305).
+    /// GRUB cannot read the new deployment's kernels (#305). Defaulted so
+    /// reports written before #328 still load in the commit step.
+    #[serde(default)]
     pub boot_on_encrypted_root: bool,
     /// The ESP-resident BLS entry written for that layout.
     pub esp_resident_entry: Option<String>,

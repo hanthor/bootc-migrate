@@ -26,6 +26,13 @@ The binary embeds the git SHA at build time (`bootc-migrate --version`).
 
 ### Added
 
+- `bootc-rebase commit` removes the composefs state that a composefs → ostree
+  re-base keeps as rollback (#315). Without `--apply` it is a dry run that
+  checks the booted deployment, the ESP snapshot, the firmware entry and the
+  old `/var` against the live `/var`, and lists every path with its size.
+  With `--apply` it copies the install report and ESP snapshot into the live
+  `/var` first. Then it deletes the old `/var`, the composefs store and the
+  composefs deployments. The OSTree repo, `/boot`, the ESP and NVRAM stay.
 - Cross-family E2E base-pair matrix (#261). Three more non-gating cells
   exercise `E2E_CROSS_FAMILY=1` beyond Bluefin → openSUSE Tumbleweed:
   Bluefin → Debian, Ubuntu and Arch Linux. The test harness adapts

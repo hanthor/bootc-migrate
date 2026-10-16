@@ -243,9 +243,9 @@ if [ -f "$STATE_DIR/report.json" ] && grep -q 'composefs=' "$CMDLINE" 2>/dev/nul
     done
 fi
 # OstreeInstall (composefs -> ostree): its own report, carried with /var,
-# and booted the OSTree deployment. There is no commit step (the composefs
-# entry stays as the rollback), but the route leaves day-2 checks that no
-# probe covers, so it always earns one prompt.
+# and booted the OSTree deployment. The composefs entry stays as the
+# rollback until `bootc-rebase commit`, and the route leaves day-2 checks
+# that no probe covers, so it always earns one prompt.
 ostree_followup=0
 if [ -f "$REBASE_STATE_DIR/ostree-install-report.json" ] && grep -q 'ostree=' "$CMDLINE" 2>/dev/null; then
     ostree_followup=1
