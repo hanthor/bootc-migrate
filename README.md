@@ -422,8 +422,8 @@ their `ID`/`ID_LIKE` sets overlap or when both ship the same package
 manager (dnf, zypper, apt, pacman or apk). When the sets share nothing and
 the package managers differ (Fedora → openSUSE, Fedora → Debian), it
 refuses. When one image ships no known package manager (Dakota is GNOME
-OS-based), it warns before staging and decides again from the staged
-deployment's own `os-release`.
+OS-based), it warns before it stages the deployment and decides again from
+the staged deployment's own `os-release`.
 
 With `--accept-cross-base`, the conversion route and both `bootc switch`
 routes (`OstreeDeploy` and `ImageSwap`) apply the cross-family policy:
@@ -442,13 +442,13 @@ routes (`OstreeDeploy` and `ImageSwap`) apply the cross-family policy:
   `<path>.rebase-old`. The tool deletes nothing.
 - For `OstreeDeploy`, the policy runs after OSTree finalizes its native
   `/etc` merge and schedules `/.autorelabel` when the target's SELinux
-  policy requires it. For `ImageSwap`, the policy runs after composefs
+  policy needs it. For `ImageSwap`, the policy runs after composefs
   finalization and combines its first-boot remap/relabel unit with the
   target's `systemd-sysusers` and `ldconfig` repair.
 
 If the staged image disagrees with the early registry scan and is
 cross-family without `--accept-cross-base`, the route leaves it staged and
-unfinalized. Remove that staged deployment before retrying; do not reboot
+unfinalized. Remove that staged deployment before you try again; do not reboot
 into it.
 
 The tool prints the report and writes it inside the staged deployment as

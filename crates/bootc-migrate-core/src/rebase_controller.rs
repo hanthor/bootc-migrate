@@ -59,27 +59,11 @@ fn cross_family_remap_plan(staged_root: &Path, target_vendor_etc: &Path) -> rema
 
 fn write_cross_family_report(
     staged_root: &Path,
-    plan: &cross_family::CrossFamilyPlan,
-    etc_plan: cross_family::EtcCrossFamilyPlan,
-    remap_plan: remap::RemapPlan,
-    rechowned_now: usize,
-    var_remap_deferred: bool,
-    relabel_scheduled: bool,
-    firstboot_unit_installed: bool,
+    report: cross_family::CrossFamilyReport,
 ) -> Result<()> {
     let remap_report = staged_root.join("bootc-migrate-remap-report.json");
-    std::fs::write(&remap_report, remap_plan.to_json())
+    std::fs::write(&remap_report, report.remap.to_json())
         .with_context(|| format!("failed to write {}", remap_report.display()))?;
-    let report = cross_family::CrossFamilyReport {
-        host: plan.host.clone(),
-        target: plan.target.clone(),
-        etc: etc_plan,
-        remap: remap_plan,
-        rechowned_now,
-        var_remap_deferred,
-        relabel_scheduled,
-        firstboot_unit_installed,
-    };
     let report_path = staged_root.join(cross_family::REPORT_FILE);
     std::fs::write(
         &report_path,
@@ -594,13 +578,16 @@ fn apply_cross_family_image_swap_policy(
 
     write_cross_family_report(
         deploy,
-        plan,
-        etc_plan,
-        remap_plan,
-        rechowned_now,
-        var_remap_deferred,
-        relabel_scheduled,
-        firstboot_unit_installed,
+        cross_family::CrossFamilyReport {
+            host: plan.host.clone(),
+            target: plan.target.clone(),
+            etc: etc_plan,
+            remap: remap_plan,
+            rechowned_now,
+            var_remap_deferred,
+            relabel_scheduled,
+            firstboot_unit_installed,
+        },
     )
 }
 
@@ -648,13 +635,16 @@ fn apply_cross_family_ostree_policy(
     };
     write_cross_family_report(
         staged_root,
-        plan,
-        etc_plan,
-        remap_plan,
-        rechowned_now,
-        false,
-        relabel_scheduled,
-        false,
+        cross_family::CrossFamilyReport {
+            host: plan.host.clone(),
+            target: plan.target.clone(),
+            etc: etc_plan,
+            remap: remap_plan,
+            rechowned_now,
+            var_remap_deferred: false,
+            relabel_scheduled,
+            firstboot_unit_installed: false,
+        },
     )
 }
 

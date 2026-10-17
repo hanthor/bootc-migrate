@@ -1681,38 +1681,38 @@ mod tests {
             fs::write(full, content).unwrap();
         };
 
-        write(source, "target.conf", "source default\n");
-        write(current, "target.conf", "local edit\n");
-        write(target, "target.conf", "target default\n");
-        write(source, "source-only.conf", "source only\n");
-        write(current, "source-only.conf", "local source edit\n");
-        write(source, "hostname", "source-host\n");
-        write(current, "hostname", "machine-host\n");
-        write(target, "hostname", "target-host\n");
-        write(current, "user-added.conf", "user value\n");
-        write(target, "target-only.conf", "target-only\n");
+        write(&source, "target.conf", "source default\n");
+        write(&current, "target.conf", "local edit\n");
+        write(&target, "target.conf", "target default\n");
+        write(&source, "source-only.conf", "source only\n");
+        write(&current, "source-only.conf", "local source edit\n");
+        write(&source, "hostname", "source-host\n");
+        write(&current, "hostname", "machine-host\n");
+        write(&target, "hostname", "target-host\n");
+        write(&current, "user-added.conf", "user value\n");
+        write(&target, "target-only.conf", "target-only\n");
         write(
-            source,
+            &source,
             "passwd",
             "root:x:0:0::/root:/bin/bash\nwheel:x:10:10::/:/sbin/nologin\n",
         );
         write(
-            current,
+            &current,
             "passwd",
             "root:x:0:0::/root:/bin/bash\nwheel:x:10:10::/:/sbin/nologin\nrealuser:x:1000:1000::/var/home/realuser:/bin/bash\n",
         );
         write(
-            target,
+            &target,
             "passwd",
             "root:x:0:0::/root:/bin/bash\nwheel:x:997:997::/:/sbin/nologin\nchrony:x:499:499::/var/lib/chrony:/sbin/nologin\n",
         );
-        write(source, "shadow", "root:*:1::::::\n");
+        write(&source, "shadow", "root:*:1::::::\n");
         write(
-            current,
+            &current,
             "shadow",
             "root:$6$real:1::::::\nrealuser:$6$u:1::::::\n",
         );
-        write(target, "shadow", "root:*:1::::::\nchrony:!:1::::::\n");
+        write(&target, "shadow", "root:*:1::::::\nchrony:!:1::::::\n");
 
         // The native switch merge has already kept the local side for the
         // conflicts and source-only path; the apply step must reconcile it.
