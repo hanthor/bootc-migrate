@@ -683,14 +683,17 @@ source of truth the CLI consults before touching anything):
 |---|---|---|
 | **ostree** | `OstreeDeploy` (native `bootc switch`) | `CoreMigration` (this repo's proven phase 0–5 pipeline) |
 | **composefs** | `OstreeInstall` (the target's own `bootc install to-existing-root`, alongside; composefs entry kept as rollback — #260, exploratory) | `ImageSwap` |
-| **package** | `PackageInstall` (planned, #370) | Two steps: package → ostree, then ostree → composefs |
+| **package** | `PackageInstall` (the shared alongside-install engine binds `/` at `/target`, carries root kernel arguments, and snapshots the old `/boot` — #373) | Two steps: package → ostree, then ostree → composefs |
 
 A **package** source is a system that is not a bootc deployment: a regular
 Fedora, Ubuntu or Arch installation. `rebase` finds one by its rpm, dpkg or
 pacman database when `bootc status` names no deployment and the root has no
 ostree or composefs state. On such a system, `--target-backend auto` (the
-default) selects ostree. Today, `--plan` shows the route and the migration
-stops before it changes the system. Issue #370 tracks the work.
+default) selects ostree. `PackageInstall` runs the target image's own `bootc
+install to-existing-root` against the live physical root after readiness and
+hardware gates pass. It snapshots the old kernels, initramfs, BLS entries and
+GRUB configuration before bootc empties `/boot`; the `Previous system` entry
+and guided package-host commit remain tracked by #374 and #378.
 
 `--dry-run` on a package host also prints a readiness report and the
 hardware report. The report refuses these systems and gives the reason for
