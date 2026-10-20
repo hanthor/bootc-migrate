@@ -71,7 +71,7 @@ sudo install -m755 target/release/bootc-migrate /usr/local/bin/
 ```
 </details>
 
-**2. Dry-run** — makes no changes, just checks your system is ready:
+**2. Dry-run** — makes no changes and checks your system is ready:
 
 ```bash
 sudo bootc-migrate \
@@ -141,8 +141,8 @@ path. Returning from ComposeFS to OSTree is not yet supported.
 
 The wizard starts in dry-run mode. Press Enter to accept each screen, use ↑/↓
 to choose an image, and press Space on the options page to change a setting.
-For a live run, turn off dry-run there. The final review requires typing
-`CONFIRM` and Enter before anything changes. Root is needed to run a migration,
+For a live run, turn off dry-run there. The final review needs typing
+`CONFIRM` and Enter before anything changes. You need root to run a migration,
 though you can browse the catalog without it.
 
 ## Architecture

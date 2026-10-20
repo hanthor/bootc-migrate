@@ -38,13 +38,13 @@ The binary embeds the git SHA at build time (`bootc-migrate --version`).
   Bluefin → Debian, Ubuntu and Arch Linux. The test harness adapts
   base-image setup (SSH units, multi-distro root home locations, and
   family-specific `/etc` configuration sidecars).
-- Package-host `/etc` migration policy (#375): rpm, dpkg and pacman
-  verification classify vendor defaults, user edits and unpackaged files
-  without a factory image. User and machine state is carried, conflicting
-  target copies survive as `.rebase-new`, identity databases merge
-  target-first with human accounts and collision remaps, and `fstab` is
-  rewritten for the bootc `/var/home` layout. The `PackageInstall` engine
-  tracked by #373 will call this building block.
+- Package-host `/etc` migration policy (#375). The policy uses rpm, dpkg or
+  pacman checks. It identifies vendor defaults, user edits and unpackaged
+  files without a factory image. The policy carries user and machine state.
+  It keeps target conflicts as `.rebase-new` files. It merges identity
+  databases with target records first, then adds human accounts and resolves
+  numeric collisions. It rewrites `fstab` for the bootc `/var/home` layout.
+  The `PackageInstall` engine in #373 will call this code.
 - Package host readiness report (#372): `bootc-rebase --dry-run` on a
   package-managed system checks boot mode, root filesystem, LUKS and LVM,
   the btrfs subvolume layout, `/boot` and `/home`, free space against the
