@@ -34,12 +34,12 @@ old OSTree deployment stays in the boot menu as a fallback the whole time.
 **1. Get the migrator.** Download the latest prebuilt binary (x86_64; for arm64
 swap in `aarch64-unknown-linux-gnu`):
 
-> **Release-naming note.** This repo was renamed from `bootc-migrate-composefs`
-> to `bootc-migrate` after v0.2.0. `release.yml` already publishes under the
-> new name, so from **v0.6.0** the tarball, the binary inside it, and the
-> container image are all `bootc-migrate`. The commands below reflect that.
-> To install the older v0.2.0 artifacts, substitute `bootc-migrate-composefs`
-> in the paths.
+> **Release-naming note.** The project changed its name from
+> `bootc-migrate-composefs` to `bootc-migrate` after v0.2.0. `release.yml`
+> already publishes under the new name. From **v0.6.0**, the tarball, the
+> binary inside it, and the container image are all `bootc-migrate`.
+> The commands below use the new name. To install the older v0.2.0 artifacts,
+> substitute `bootc-migrate-composefs` in the paths.
 
 ```bash
 curl -fsSL -o bmc.tar.gz \
@@ -78,7 +78,7 @@ sudo bootc-migrate \
   --target-image ghcr.io/projectbluefin/dakota:stable --dry-run
 ```
 
-**3. Migrate** (~5–25 min depending on cache/network):
+**3. Migrate** (~5–25 min; cache and network affect duration):
 
 ```bash
 sudo bootc-migrate \
@@ -100,9 +100,9 @@ sudo bootc-migrate commit                 # one-way; removes the OSTree fallback
 ```
 
 > ⚠️ **Note:** Phase 4 copies `/var` to the composefs side. After migration,
-> the two `/var` trees are **independent** — changes you make on the composefs
-> side won't be reflected if you roll back to OSTree (and vice versa). Commit
-> only when you're satisfied with the new system.
+> the two `/var` trees are **independent**. Changes on the composefs side do
+> not appear after a rollback to OSTree, and OSTree changes do not appear on
+> the composefs side. Commit only when you are satisfied with the new system.
 
 That's it. For flags, rollback, troubleshooting, and the full phase-by-phase
 breakdown, see [Usage — end-to-end walkthrough](#usage--end-to-end-walkthrough).
