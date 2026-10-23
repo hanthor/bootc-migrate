@@ -66,10 +66,14 @@ The binary embeds the git SHA at build time (`bootc-migrate --version`).
   target image's size, running package managers and SELinux. It prints a
   reason for each refusal, then the hardware report.
 - `bootc-rebase` detects a package-managed source (rpm, dpkg or pacman
-  database, no ostree or composefs state) as `Backend::Package` and plans
-  the `package -> ostree` route (`PackageInstall`, not implemented yet).
-  `--target-backend` now defaults to `auto`: composefs from a bootc
-  deployment, as before, and ostree from a package host (#371, part of #370).
+  database, no ostree or composefs state) as `Backend::Package` and executes
+  the `package -> ostree` route through `PackageInstall`. The shared
+  `OstreeInstall` engine binds the live `/` at `/target` with `rslave`
+  propagation, carries the old root's mount kernel arguments, snapshots its
+  kernel, initramfs, BLS and GRUB files before alongside mode empties `/boot`,
+  and records a package-install report for the rollback stage (#373).
+  `--target-backend` defaults to `auto`: composefs from a bootc deployment
+  and ostree from a package host (#371, part of #370).
 - The TUI now shows a read-only preview for package-managed hosts.
   It limits the target picker to OSTree images and runs the readiness and hardware reports.
   Live `PackageInstall` waits for #373. Guidance, evidence rows, and the roadmap entry define the #381 boundary.
