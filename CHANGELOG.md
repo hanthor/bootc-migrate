@@ -37,6 +37,14 @@ The binary embeds the git SHA at build time (`bootc-migrate --version`).
   round-trip. The new matrix cells are exploratory until the package route is
   complete and its first Fedora Cloud run is green.
 
+- ComposeFS migrations now run a post-seal integrity pass. The native
+  composefs-rs backend runs `fsck` on the store. Both backends read and verify
+  every object. The check reports fs-verity storage failures before reboot,
+  not later as EIO.
+- OSTree imports now use object IDs from the store's SHA-512 fs-verity digest.
+  They enable fs-verity before they pull the target image. The imported
+  objects then match the integrity check.
+
 - A versioned application replacement catalog shared with wootc maps Windows
   display names and rpm, deb, and pacman package names to Flatpak IDs and
   portability guidance. The typed core reader validates and bundles the table
