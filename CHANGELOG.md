@@ -32,6 +32,12 @@ The binary embeds the git SHA at build time (`bootc-migrate --version`).
   round-trip. The new matrix cells are exploratory until the package route is
   complete and its first Fedora Cloud run is green.
 
+- A versioned application replacement catalog shared with wootc maps Windows
+  display names and rpm, deb, and pacman package names to Flatpak IDs and
+  portability guidance. The typed core reader validates and bundles the table
+  for the package-host software report, while the catalog workflow publishes
+  `apps.json` beside the image feed (#388).
+
 - TUI route selection on composefs hosts (#312). On an ostree host the
   wizard flow is unchanged (the conversion route); on a composefs host the
   wizard scans the selected target in the background and offers a backend
