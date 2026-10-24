@@ -25,6 +25,11 @@ The binary embeds the git SHA at build time (`bootc-migrate --version`).
 ## [Unreleased]
 
 ### Added
+- Secure Boot / UEFI CA preflight (#386): the preflight checks the target
+  `systemd-boot` and bootupd shim payloads. It compares their Authenticode
+  issuers with the firmware's `db` CA generations. It refuses known mismatches
+  before migration changes the ESP or boot order.
+
 - Package-based base-image E2E coverage (#380): `package-install` boots
   checksum-pinned Fedora Cloud, Fedora Workstation, and Ubuntu Cloud disks
   through cloud-init, creates package/home/desktop fixtures, runs the package
