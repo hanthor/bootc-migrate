@@ -159,6 +159,10 @@ The binary embeds the git SHA at build time (`bootc-migrate --version`).
 
 ### Fixed
 
+- The E2E SSH service now waits for all Fedora host-key generators before it
+  starts `sshd -i`. The socket stays available while the system creates host
+  keys. This avoids the earlier host-key race (#383).
+
 - Cross-base OstreeDeploy now remaps ownership in the stateroot's physical,
   shared `/var` instead of looking for a nonexistent `var` inside the staged
   deployment. The gating Bluefin → Dakota E2E cell seeds a divergent
